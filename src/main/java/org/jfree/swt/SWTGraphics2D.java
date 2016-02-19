@@ -1260,47 +1260,39 @@ public class SWTGraphics2D extends Graphics2D {
     @Override
     public boolean drawImage(Image image, int x, int y, Color bgcolor,
             ImageObserver observer) {
-        if (image == null) {
-            throw new IllegalArgumentException("Null 'image' argument.");
-        }
         int w = image.getWidth(null);
-        int h = image.getHeight(null);
-        if (w == -1 || h == -1) {
+        if (w < 0) {
             return false;
         }
-        Paint savedPaint = getPaint();
-        fill(new Rectangle2D.Double(x, y, w, h));
-        setPaint(savedPaint);
-        return drawImage(image, x, y, observer);
+        int h = image.getHeight(null);
+        if (h < 0) {
+            return false;
+        }
+        return drawImage(image, x, y, w, h, bgcolor, observer);
     }
 
     /**
-     * Draws an image.
-     *
-     * @param image  the image ({@code null} not permitted).
+     * Draws an image to the rectangle {@code (x, y, w, h)} (scaling it if
+     * required), first filling the background with the specified color.  Note 
+     * that the {@code observer} is ignored.
+     * 
+     * @param image  the image.
      * @param x  the x-coordinate.
      * @param y  the y-coordinate.
      * @param width  the width.
      * @param height  the height.
-     * @param bgcolor  the background color.
-     * @param observer  an image observer.
-     *
-     * @return A boolean.
+     * @param bgcolor  the background color ({@code null} permitted).
+     * @param observer  ignored.
+     * 
+     * @return {@code true} if the image is drawn.      
      */
     @Override
     public boolean drawImage(Image image, int x, int y, int width, int height,
             Color bgcolor, ImageObserver observer) {
-        if (image == null) { 
-            throw new IllegalArgumentException("Null 'image' argument");
-        }
-        int w = image.getWidth(null);
-        int h = image.getHeight(null);
-        if (w == -1 || h == -1) {
-            return false;
-        }
-        Paint savedPaint = getPaint();
-        fill(new Rectangle2D.Double(x, y, w, h));
-        setPaint(savedPaint);
+        Paint saved = getPaint();
+        setPaint(bgcolor);
+        fillRect(x, y, width, height);
+        setPaint(saved);
         return drawImage(image, x, y, width, height, observer);
     }
 
