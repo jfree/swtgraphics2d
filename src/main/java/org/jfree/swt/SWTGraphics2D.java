@@ -192,8 +192,8 @@ public class SWTGraphics2D extends Graphics2D {
      * @param hintKey  the key ({@code null} not permitted).
      * @param hintValue  the value (must be compatible with the specified key).
      *
-     * @throws IllegalArgumentException if <code>hintValue</code> is not
-     *         compatible with the <code>hintKey</code>.
+     * @throws IllegalArgumentException if {@code hintValue} is not
+     *         compatible with the {@code hintKey}.
      *
      * @see #getRenderingHint(RenderingHints.Key)
      */
@@ -255,8 +255,8 @@ public class SWTGraphics2D extends Graphics2D {
      * Sets the paint for this graphics context.  For now, this graphics
      * context only supports instances of {@link Color} or
      * {@link GradientPaint} (in the latter case there is no real gradient
-     * support, the paint used is the <code>Color</code> returned by
-     * <code>getColor1()</code>).
+     * support, the paint used is the {@code Color} returned by
+     * {@code getColor1()}).
      *
      * @param paint  the paint ({@code null} permitted, ignored).
      *
@@ -764,7 +764,7 @@ public class SWTGraphics2D extends Graphics2D {
 
     /**
      * Fill a rectangle area on the swt graphic composite.
-     * The <code>fillRectangle</code> method of the <code>GC</code>
+     * The {@code fillRectangle} method of the {@code GC}
      * class uses the background color so we must switch colors.
      * @see java.awt.Graphics#fillRect(int, int, int, int)
      */
@@ -990,7 +990,7 @@ public class SWTGraphics2D extends Graphics2D {
 
     /**
      * Returns {@code true} if the rectangle (in device space) intersects
-     * with the shape (the interior, if <code>onStroke</code> is false, 
+     * with the shape (the interior, if {@code onStroke} is false, 
      * otherwise the stroked outline of the shape).
      * 
      * @param rect  a rectangle (in device space).
@@ -1261,7 +1261,7 @@ public class SWTGraphics2D extends Graphics2D {
      * to the resource pool will be disposed when {@link #dispose()} is called.
      *
      * @param resource the resource to add to the pool.
-     * @return the swt <code>Resource</code> just added.
+     * @return the swt {@code Resource} just added.
      */
     private Resource addToResourcePool(Resource resource) {
         this.resourcePool.add(resource);
@@ -1370,7 +1370,7 @@ public class SWTGraphics2D extends Graphics2D {
     }
 
     /**
-     * Converts an AWT <code>Shape</code> into a SWT <code>Path</code>.
+     * Converts an AWT {@code Shape} into a SWT {@code Path}.
      *
      * @param shape  the shape ({@code null} not permitted).
      *

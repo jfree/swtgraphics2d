@@ -90,7 +90,7 @@ public class SWTUtils {
     protected static final JPanel DUMMY_PANEL = new JPanel();
 
     /**
-     * Create a <code>FontData</code> object which encapsulate
+     * Create a {@code FontData} object which encapsulate
      * the essential data to create a swt font. The data is taken
      * from the provided awt Font.
      * <p>Generally speaking, given a font size, the returned swt font
@@ -108,7 +108,7 @@ public class SWTUtils {
      * @param font The awt font from which to get the data.
      * @param ensureSameSize A boolean used to enforce the same size
      * (in pixels) between the awt font and the newly created swt font.
-     * @return a <code>FontData</code> object.
+     * @return a {@code FontData} object.
      */
     public static FontData toSwtFontData(Device device, java.awt.Font font,
             boolean ensureSameSize) {
@@ -156,7 +156,7 @@ public class SWTUtils {
 
     /**
      * Create an awt font by converting as much information
-     * as possible from the provided swt <code>FontData</code>.
+     * as possible from the provided swt {@code FontData}.
      * <p>Generally speaking, given a font size, an swt font will
      * display differently on the screen than the corresponding awt
      * one. Because the SWT toolkit use native graphical ressources whenever
@@ -210,7 +210,7 @@ public class SWTUtils {
 
     /**
      * Create an awt font by converting as much information
-     * as possible from the provided swt <code>Font</code>.
+     * as possible from the provided swt {@code Font}.
      *
      * @param device The swt device to draw on (display or gc device).
      * @param font The swt font to convert.
@@ -281,7 +281,7 @@ public class SWTUtils {
      * Transform an awt Rectangle2d instance into a swt one.
      * The coordinates are rounded to integer for the swt object.
      * @param rect2d The awt rectangle to map.
-     * @return an swt <code>Rectangle</code> object.
+     * @return an swt {@code Rectangle} object.
      */
     public static Rectangle toSwtRectangle(Rectangle2D rect2d) {
         return new Rectangle(
@@ -293,7 +293,7 @@ public class SWTUtils {
 
     /**
      * Transform a swt Rectangle instance into an awt one.
-     * @param rect the swt <code>Rectangle</code>
+     * @param rect the swt {@code Rectangle}
      * @return a Rectangle2D.Double instance with
      * the eappropriate location and size.
      */
@@ -309,7 +309,7 @@ public class SWTUtils {
      *
      * @param p  the SWT point ({@code null} not permitted).
      *
-     * @return An AWT point with the same coordinates as <code>p</code>.
+     * @return An AWT point with the same coordinates as {@code p}.
      *
      * @see #toSwtPoint(java.awt.Point)
      */
@@ -323,7 +323,7 @@ public class SWTUtils {
      *
      * @param p  the AWT point ({@code null} not permitted).
      *
-     * @return An SWT point with the same coordinates as <code>p</code>.
+     * @return An SWT point with the same coordinates as {@code p}.
      *
      * @see #toAwtPoint(Point)
      */
@@ -337,7 +337,7 @@ public class SWTUtils {
      *
      * @param p  the AWT point ({@code null} not permitted).
      *
-     * @return An SWT point with the same coordinates as <code>p</code>.
+     * @return An SWT point with the same coordinates as {@code p}.
      *
      * @see #toAwtPoint(Point)
      */
@@ -347,7 +347,7 @@ public class SWTUtils {
     }
 
     /**
-     * Creates an AWT <code>MouseEvent</code> from a swt event.
+     * Creates an AWT {@code MouseEvent} from a swt event.
      * This method helps passing SWT mouse event to awt components.
      * @param event The swt event.
      * @return A AWT mouse event based on the given SWT event.
@@ -398,7 +398,7 @@ public class SWTUtils {
     }
 
     /**
-     * Converts a buffered image to SWT <code>ImageData</code>.
+     * Converts a buffered image to SWT {@code ImageData}.
      *
      * @param bufferedImage  the buffered image ({@code null} not
      *         permitted).
