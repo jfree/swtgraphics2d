@@ -41,7 +41,7 @@
  * 29-Jan-2007 : Fixed the fillRect method (HP);
  * 31-Jan-2007 : Moved the dummy JPanel to SWTUtils.java,
  *               implemented the drawLine method (HP);
- * 07-Apr-2007 : Dispose some of the swt ressources,
+ * 07-Apr-2007 : Dispose some of the SWT resources,
  *               thanks to silent for pointing this out (HP);
  * 23-May-2007 : Removed resource leaks by adding a resource pool (CC);
  * 15-Jun-2007 : Fixed compile error for JDK 1.4 (DG);
@@ -107,7 +107,7 @@ import org.eclipse.swt.graphics.Resource;
 import org.eclipse.swt.graphics.Transform;
 
 /**
- * This is a class utility to draw Graphics2D stuff on a swt composite.
+ * This is a class utility to draw Graphics2D stuff on an SWT composite.
  * It is presently developed to use JFreeChart with the Standard
  * Widget Toolkit but may be of a wider use later.
  */
@@ -126,16 +126,16 @@ public class SWTGraphics2D extends Graphics2D {
      * due to the poor compositing interface of the SWT toolkit. */
     private java.awt.Composite composite;
 
-    /** A HashMap to store the Swt color resources. */
+    /** A HashMap to store the SWT color resources. */
     private Map colorsPool = new HashMap();
 
-    /** A HashMap to store the Swt font resources. */
+    /** A HashMap to store the SWT font resources. */
     private Map fontsPool = new HashMap();
 
-    /** A HashMap to store the Swt transform resources. */
+    /** A HashMap to store the SWT transform resources. */
     private Map transformsPool = new HashMap();
 
-    /** A List to store the Swt resources. */
+    /** A List to store the SWT resources. */
     private List resourcePool = new ArrayList();
 
     /**
@@ -803,7 +803,7 @@ public class SWTGraphics2D extends Graphics2D {
     }
 
     /**
-     * Fill a rectangle area on the swt graphic composite.
+     * Fill a rectangle area on the SWT graphic composite.
      * The {@code fillRectangle} method of the {@code GC}
      * class uses the background color so we must switch colors.
      * @see java.awt.Graphics#fillRect(int, int, int, int)
@@ -920,8 +920,8 @@ public class SWTGraphics2D extends Graphics2D {
     }
 
     /**
-     * Returns the font in form of an awt font created
-     * with the parameters of the font of the swt graphic
+     * Returns the font in form of an AWT font created
+     * with the parameters of the font of the SWT graphic
      * composite.
      * @return The font.
      * @see java.awt.Graphics#getFont()
@@ -930,13 +930,13 @@ public class SWTGraphics2D extends Graphics2D {
     public Font getFont() {
         // retrieve the swt font description in an os indept way
         FontData[] fontData = this.gc.getFont().getFontData();
-        // create a new awt font with the appropiate data
+        // create a new AWT font with the appropiate data
         return SWTUtils.toAwtFont(this.gc.getDevice(), fontData[0], true);
     }
 
     /**
-     * Set the font swt graphic composite from the specified
-     * awt font. Be careful that the newly created swt font
+     * Set the font SWT graphic composite from the specified
+     * AWT font. Be careful that the newly created SWT font
      * must be disposed separately.
      * @see java.awt.Graphics#setFont(java.awt.Font)
      */
@@ -984,7 +984,7 @@ public class SWTGraphics2D extends Graphics2D {
 
     /**
      * Draws a string on the receiver. note that
-     * to be consistent with the awt method,
+     * to be consistent with the AWT method,
      * the y has to be modified with the ascent of the font.
      *
      * @param text
@@ -1325,11 +1325,11 @@ public class SWTGraphics2D extends Graphics2D {
     }
 
     /**
-     * Add given swt resource to the resource pool. All resources added
+     * Add given SWT resource to the resource pool. All resources added
      * to the resource pool will be disposed when {@link #dispose()} is called.
      *
      * @param resource the resource to add to the pool.
-     * @return the swt {@code Resource} just added.
+     * @return the SWT {@code Resource} just added.
      */
     private Resource addToResourcePool(Resource resource) {
         this.resourcePool.add(resource);
@@ -1427,7 +1427,7 @@ public class SWTGraphics2D extends Graphics2D {
     /**
      * Perform a switch between foreground and background
      * color of gc. This is needed for consistency with
-     * the awt behaviour, and is required notably for the
+     * the AWT behaviour, and is required notably for the
      * filling methods.
      */
     private void switchColors() {
