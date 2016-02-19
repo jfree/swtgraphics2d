@@ -1085,20 +1085,23 @@ public class SWTGraphics2D extends Graphics2D {
     }
 
     /**
-     * Not implemented - see {@link Graphics2D#drawImage(Image,
-     * AffineTransform, ImageObserver)}.
-     *
+     * Draws an image with the specified transform. Note that the 
+     * {@code observer} is ignored in this implementation.     
+     * 
      * @param image  the image.
      * @param xform  the transform.
-     * @param obs  an image observer.
-     *
-     * @return A boolean.
+     * @param obs  the image observer (ignored).
+     * 
+     * @return {@code true} if the image is drawn. 
      */
     @Override
     public boolean drawImage(Image image, AffineTransform xform,
             ImageObserver obs) {
-        // TODO Auto-generated method stub
-        return false;
+        AffineTransform savedTransform = getTransform();
+        transform(xform);
+        boolean result = drawImage(image, 0, 0, obs);
+        setTransform(savedTransform);
+        return result;
     }
 
     /**
