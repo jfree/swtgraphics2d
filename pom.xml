@@ -60,7 +60,7 @@
         </configuration>
       </plugin>
 
-      <plugin>
+<!--      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-gpg-plugin</artifactId>
         <version>1.5</version>
@@ -74,7 +74,7 @@
           </execution>
         </executions>
       </plugin>
-
+-->
       <plugin>
         <groupId>org.sonatype.plugins</groupId>
         <artifactId>nexus-staging-maven-plugin</artifactId>
