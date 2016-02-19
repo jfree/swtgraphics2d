@@ -1297,48 +1297,65 @@ public class SWTGraphics2D extends Graphics2D {
     }
 
     /**
-     * Not implemented - see {@link Graphics#drawImage(Image, int, int, int,
-     *     int, int, int, int, int, ImageObserver)}.
-     *
+     * Draws part of an image (defined by the source rectangle 
+     * {@code (sx1, sy1, sx2, sy2)}) into the destination rectangle
+     * {@code (dx1, dy1, dx2, dy2)}.  Note that the {@code observer} 
+     * is ignored.
+     * 
      * @param image  the image.
-     * @param dx1
-     * @param dy1
-     * @param dx2
-     * @param dy2
-     * @param sx1
-     * @param sy1
-     * @param sx2
-     * @param sy2
-     * @param observer
+     * @param dx1  the x-coordinate for the top left of the destination.
+     * @param dy1  the y-coordinate for the top left of the destination.
+     * @param dx2  the x-coordinate for the bottom right of the destination.
+     * @param dy2  the y-coordinate for the bottom right of the destination.
+     * @param sx1  the x-coordinate for the top left of the source.
+     * @param sy1  the y-coordinate for the top left of the source.
+     * @param sx2  the x-coordinate for the bottom right of the source.
+     * @param sy2  the y-coordinate for the bottom right of the source.
+     * 
+     * @return {@code true} if the image is drawn. 
      */
     @Override
     public boolean drawImage(Image image, int dx1, int dy1, int dx2, int dy2,
             int sx1, int sy1, int sx2, int sy2, ImageObserver observer) {
-        // TODO Auto-generated method stub
-        return false;
+        int w = dx2 - dx1;
+        int h = dy2 - dy1;
+        BufferedImage img2 = new BufferedImage(w, h, 
+                BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2 = img2.createGraphics();
+        g2.drawImage(image, 0, 0, w, h, sx1, sy1, sx2, sy2, null);
+        return drawImage(img2, dx1, dy1, null);
     }
 
     /**
-     * Not implemented - see {@link Graphics#drawImage(Image, int, int, int,
-     *     int, int, int, int, int, Color, ImageObserver)}.
-     *
+     * Draws part of an image (defined by the source rectangle 
+     * {@code (sx1, sy1, sx2, sy2)}) into the destination rectangle
+     * {@code (dx1, dy1, dx2, dy2)}.  The destination rectangle is first
+     * cleared by filling it with the specified {@code bgcolor}. Note that
+     * the {@code observer} is ignored. 
+     * 
      * @param image  the image.
-     * @param dx1
-     * @param dy1
-     * @param dx2
-     * @param dy2
-     * @param sx1
-     * @param sy1
-     * @param sx2
-     * @param sy2
-     * @param bgcolor
-     * @param observer
-     */
+     * @param dx1  the x-coordinate for the top left of the destination.
+     * @param dy1  the y-coordinate for the top left of the destination.
+     * @param dx2  the x-coordinate for the bottom right of the destination.
+     * @param dy2  the y-coordinate for the bottom right of the destination.
+     * @param sx1  the x-coordinate for the top left of the source.
+     * @param sy1  the y-coordinate for the top left of the source.
+     * @param sx2  the x-coordinate for the bottom right of the source.
+     * @param sy2  the y-coordinate for the bottom right of the source.
+     * @param bgcolor  the background color ({@code null} permitted).
+     * @param observer  ignored.
+     * 
+     * @return {@code true} if the image is drawn. 
+     */    
     public boolean drawImage(Image image, int dx1, int dy1, int dx2, int dy2,
             int sx1, int sy1, int sx2, int sy2, Color bgcolor,
             ImageObserver observer) {
-        // TODO Auto-generated method stub
-        return false;
+        Paint saved = getPaint();
+        setPaint(bgcolor);
+        fillRect(dx1, dy1, dx2 - dx1, dy2 - dy1);
+        setPaint(saved);
+        return drawImage(image, dx1, dy1, dx2, dy2, sx1, sy1, sx2, sy2, 
+                observer);
     }
 
     /**
