@@ -1105,20 +1105,19 @@ public class SWTGraphics2D extends Graphics2D {
     }
 
     /**
-     * Draws an image.
-     *
-     * @param image  the image.
-     * @param op  the image operation.
+     * Draws the image resulting from applying the {@code BufferedImageOp}
+     * to the specified image at the location {@code (x, y)}.
+     * 
+     * @param img  the image.
+     * @param op  the operation.
      * @param x  the x-coordinate.
      * @param y  the y-coordinate.
      */
     @Override
     public void drawImage(BufferedImage image, BufferedImageOp op, int x,
             int y) {
-        org.eclipse.swt.graphics.Image im = new org.eclipse.swt.graphics.Image(
-                this.gc.getDevice(), SWTUtils.convertToSWT(image));
-        this.gc.drawImage(im, x, y);
-        im.dispose();
+        BufferedImage imageToDraw = op.filter(image, null);
+        drawImage(imageToDraw, new AffineTransform(1f, 0f, 0f, 1f, x, y), null);
     }
 
     /**
