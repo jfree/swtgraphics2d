@@ -1206,15 +1206,15 @@ public class SWTGraphics2D extends Graphics2D {
     @Override
     public boolean drawImage(Image image, int x, int y, 
             ImageObserver observer) {
-        ImageData data = SWTUtils.convertAWTImageToSWT(image);
-        if (data == null) {
+        int w = image.getWidth(observer);
+        if (w < 0) {
             return false;
         }
-        org.eclipse.swt.graphics.Image im = new org.eclipse.swt.graphics.Image(
-                this.gc.getDevice(), data);
-        this.gc.drawImage(im, x, y);
-        im.dispose();
-        return true;
+        int h = image.getHeight(observer);
+        if (h < 0) {
+            return false;
+        }
+        return drawImage(image, x, y, w, h, observer);
     }
 
     /**
