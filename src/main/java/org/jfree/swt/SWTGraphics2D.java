@@ -88,12 +88,15 @@ import java.awt.geom.PathIterator;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.BufferedImageOp;
+import java.awt.image.ColorModel;
 import java.awt.image.ImageObserver;
 import java.awt.image.RenderedImage;
+import java.awt.image.WritableRaster;
 import java.awt.image.renderable.RenderableImage;
 import java.text.AttributedCharacterIterator;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -1141,7 +1144,41 @@ public class SWTGraphics2D extends Graphics2D {
      */
     @Override
     public void drawRenderedImage(RenderedImage image, AffineTransform xform) {
-        // TODO Auto-generated method stub
+        BufferedImage bi = convertRenderedImage(image);
+        drawImage(bi, xform, null);
+    }
+
+    /**
+     * Converts a rendered image to a {@code BufferedImage}.  This utility
+     * method has come from a forum post by Jim Moore at:
+     * <p>
+     * <a href="http://www.jguru.com/faq/view.jsp?EID=114602">
+     * http://www.jguru.com/faq/view.jsp?EID=114602</a>
+     * 
+     * @param img  the rendered image.
+     * 
+     * @return A buffered image. 
+     */
+    private static BufferedImage convertRenderedImage(RenderedImage img) {
+        if (img instanceof BufferedImage) {
+            return (BufferedImage) img;	
+        }
+        ColorModel cm = img.getColorModel();
+        int width = img.getWidth();
+        int height = img.getHeight();
+        WritableRaster raster = cm.createCompatibleWritableRaster(width, height);
+        boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
+        Hashtable properties = new Hashtable();
+        String[] keys = img.getPropertyNames();
+        if (keys != null) {
+            for (int i = 0; i < keys.length; i++) {
+                properties.put(keys[i], img.getProperty(keys[i]));
+            }
+        }
+        BufferedImage result = new BufferedImage(cm, raster, 
+                isAlphaPremultiplied, properties);
+        img.copyData(raster);
+        return result;
     }
 
     /**
