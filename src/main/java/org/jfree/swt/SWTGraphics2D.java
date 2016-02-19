@@ -1136,10 +1136,9 @@ public class SWTGraphics2D extends Graphics2D {
     }
 
     /**
-     * Not implemented - see {@link Graphics2D#drawRenderedImage(RenderedImage,
-     * AffineTransform)}.
-     *
-     * @param image  the image.
+     * Draws a rendered image.
+     * 
+     * @param image  the rendered image.
      * @param xform  the transform.
      */
     @Override
@@ -1182,17 +1181,16 @@ public class SWTGraphics2D extends Graphics2D {
     }
 
     /**
-     * Not implemented - see {@link Graphics2D#drawRenderableImage(
-     * RenderableImage, AffineTransform)}.
-     *
-     * @param image  the image.
+     * Draws the renderable image.
+     * 
+     * @param image  the renderable image.
      * @param xform  the transform.
      */
     @Override
     public void drawRenderableImage(RenderableImage image,
             AffineTransform xform) {
-        // TODO Auto-generated method stub
-
+        RenderedImage ri = image.createDefaultRendering();
+        drawRenderedImage(ri, xform);
     }
 
     /**
