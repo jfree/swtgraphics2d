@@ -2,9 +2,9 @@
  * SWTGraphics2D : a bridge from Java2D to SWT
  * ===========================================
  *
- * (C) Copyright 2000-2016, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2006-2016, by Object Refinery Limited and Contributors.
  *
- * Project Info:  http://www.jfree.org/jfreechart/index.html
+ * Project Info:  https://github.com/jfree/swtgraphics2d
  *
  * This library is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
