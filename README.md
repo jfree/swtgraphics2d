@@ -1,15 +1,13 @@
 SWTGraphics2D
 =============
 
-Version 1.0 - not yet released.
+Version 1.0 - 20 February 2016.
 
 (C)opyright 2006-2016, by Object Refinery Limited and Contributors.  All rights reserved.
 
 Overview
 --------
-A Graphics2D implementation that targets an SWT graphics context, allowing the 
-use of Java2D code in SWT.  This class was originally developed as part of
-the JFreeChart project (http://www.jfree.org/jfreechart).
+A Graphics2D implementation that targets an SWT graphics context, allowing the use of Java2D code in SWT.  This class was originally developed as part of the JFreeChart project (http://www.jfree.org/jfreechart).  It is now a standalone project.
 
 License
 -------
