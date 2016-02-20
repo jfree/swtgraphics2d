@@ -110,13 +110,12 @@ import org.eclipse.swt.graphics.Resource;
 import org.eclipse.swt.graphics.Transform;
 
 /**
- * This is a class utility to draw Graphics2D stuff on an SWT composite.
- * It is presently developed to use JFreeChart with the Standard
- * Widget Toolkit but may be of a wider use later.
+ * An implementation of the {@code Graphics2D} API targeting an SWT graphics
+ * context.
  */
 public class SWTGraphics2D extends Graphics2D {
 
-    /** The swt graphic composite */
+    /** The SWT graphic composite */
     private GC gc;
 
     /**
@@ -125,8 +124,10 @@ public class SWTGraphics2D extends Graphics2D {
      */
     private RenderingHints hints;
 
-    /** A reference to the compositing rule to apply. This is necessary
-     * due to the poor compositing interface of the SWT toolkit. */
+    /** 
+     * A reference to the compositing rule to apply. This is necessary
+     * due to the poor compositing interface of the SWT toolkit. 
+     */
     private java.awt.Composite composite;
 
     /** A HashMap to store the SWT color resources. */
