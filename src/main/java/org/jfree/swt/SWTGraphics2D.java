@@ -990,7 +990,7 @@ public class SWTGraphics2D extends Graphics2D {
      * Draws a string at {@code (x, y)}.  The start of the text at the
      * baseline level will be aligned with the {@code (x, y)} point.
      * 
-     * @param str  the string ({@code null} not permitted).
+     * @param text  the string ({@code null} not permitted).
      * @param x  the x-coordinate.
      * @param y  the y-coordinate.
      * 
