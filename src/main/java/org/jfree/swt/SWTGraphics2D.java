@@ -987,12 +987,14 @@ public class SWTGraphics2D extends Graphics2D {
     }
 
     /**
-     * Draws a string on the receiver. note that
-     * to be consistent with the AWT method,
-     * the y has to be modified with the ascent of the font.
-     *
-     * @param text
-     * @see java.awt.Graphics#drawString(java.lang.String, int, int)
+     * Draws a string at {@code (x, y)}.  The start of the text at the
+     * baseline level will be aligned with the {@code (x, y)} point.
+     * 
+     * @param str  the string ({@code null} not permitted).
+     * @param x  the x-coordinate.
+     * @param y  the y-coordinate.
+     * 
+     * @see #drawString(java.lang.String, float, float) 
      */
     @Override
     public void drawString(String text, int x, int y) {
@@ -1112,7 +1114,7 @@ public class SWTGraphics2D extends Graphics2D {
      * Draws the image resulting from applying the {@code BufferedImageOp}
      * to the specified image at the location {@code (x, y)}.
      * 
-     * @param img  the image.
+     * @param image  the image.
      * @param op  the operation.
      * @param x  the x-coordinate.
      * @param y  the y-coordinate.
