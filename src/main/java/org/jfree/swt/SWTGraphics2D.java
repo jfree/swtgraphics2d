@@ -1146,13 +1146,17 @@ public class SWTGraphics2D extends Graphics2D {
     }
 
     /**
-     * Draws a rendered image.
-     * 
-     * @param image  the rendered image.
+     * Draws a rendered image. If {@code img} is {@code null} this method
+     * does nothing.
+     *
+     * @param image  the rendered image ({@code null} permitted).
      * @param xform  the transform.
      */
     @Override
     public void drawRenderedImage(RenderedImage image, AffineTransform xform) {
+        if (image == null) {
+            return;
+        }
         BufferedImage bi = convertRenderedImage(image);
         drawImage(bi, xform, null);
     }
