@@ -1104,9 +1104,13 @@ public class SWTGraphics2D extends Graphics2D {
     public boolean drawImage(Image image, AffineTransform xform,
             ImageObserver obs) {
         AffineTransform savedTransform = getTransform();
-        transform(xform);
+        if (xform != null) {
+            transform(xform);
+        }
         boolean result = drawImage(image, 0, 0, obs);
-        setTransform(savedTransform);
+        if (xform != null) {
+            setTransform(savedTransform);
+        }
         return result;
     }
 
