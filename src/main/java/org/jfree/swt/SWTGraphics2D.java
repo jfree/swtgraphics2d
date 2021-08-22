@@ -1115,14 +1115,17 @@ public class SWTGraphics2D extends Graphics2D {
      * to the specified image at the location {@code (x, y)}.
      * 
      * @param image  the image.
-     * @param op  the operation.
+     * @param op  the operation ({@code null} permitted).
      * @param x  the x-coordinate.
      * @param y  the y-coordinate.
      */
     @Override
     public void drawImage(BufferedImage image, BufferedImageOp op, int x,
             int y) {
-        BufferedImage imageToDraw = op.filter(image, null);
+        BufferedImage imageToDraw = image;
+        if (op != null) {
+            imageToDraw = op.filter(image, null);
+        }
         drawImage(imageToDraw, new AffineTransform(1f, 0f, 0f, 1f, x, y), null);
     }
 
