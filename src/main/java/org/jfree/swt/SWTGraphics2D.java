@@ -286,7 +286,7 @@ public class SWTGraphics2D extends Graphics2D {
             setColor(gp.getColor1());
         }
         else {
-            throw new RuntimeException("Can only handle 'Color' at present.");
+            //throw new RuntimeException("Can only handle 'Color' at present.");
         }
     }
 
@@ -1199,7 +1199,7 @@ public class SWTGraphics2D extends Graphics2D {
     /**
      * Draws an image with the top left corner aligned to the point (x, y).
      *
-     * @param image  the image.
+     * @param image  the image ({@code null} permitted...method will do nothing).
      * @param x  the x-coordinate.
      * @param y  the y-coordinate.
      * @param observer  ignored here.
@@ -1209,6 +1209,9 @@ public class SWTGraphics2D extends Graphics2D {
     @Override
     public boolean drawImage(Image image, int x, int y, 
             ImageObserver observer) {
+        if (image == null) {
+            return true;
+        }
         int w = image.getWidth(observer);
         if (w < 0) {
             return false;
@@ -1224,7 +1227,7 @@ public class SWTGraphics2D extends Graphics2D {
      * Draws an image with the top left corner aligned to the point (x, y),
      * and scaled to the specified width and height.
      *
-     * @param image  the image.
+     * @param image  the image ({@code null} permitted...draws nothing).
      * @param x  the x-coordinate.
      * @param y  the y-coordinate.
      * @param width  the width for the rendered image.
@@ -1236,6 +1239,9 @@ public class SWTGraphics2D extends Graphics2D {
     @Override
     public boolean drawImage(Image image, int x, int y, int width, int height,
             ImageObserver observer) {
+        if (image == null) {
+            return true;
+        }
         ImageData data = SWTUtils.convertAWTImageToSWT(image);
         if (data == null) {
             return false;
@@ -1252,7 +1258,7 @@ public class SWTGraphics2D extends Graphics2D {
     /**
      * Draws an image.
      *
-     * @param image ({@code null} not permitted).
+     * @param image  the image ({@code null} permitted...draws nothing).
      * @param x  the x-coordinate.
      * @param y  the y-coordinate.
      * @param bgcolor  the background color.
@@ -1263,6 +1269,9 @@ public class SWTGraphics2D extends Graphics2D {
     @Override
     public boolean drawImage(Image image, int x, int y, Color bgcolor,
             ImageObserver observer) {
+        if (image == null) {
+            return true;
+        }
         int w = image.getWidth(null);
         if (w < 0) {
             return false;
