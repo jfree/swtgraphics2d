@@ -124,6 +124,8 @@ public class SWTGraphics2D extends Graphics2D {
      */
     private RenderingHints hints;
 
+    private Font awtFont;
+
     /** 
      * A reference to the compositing rule to apply. This is necessary
      * due to the poor compositing interface of the SWT toolkit. 
@@ -476,8 +478,10 @@ public class SWTGraphics2D extends Graphics2D {
      */
     @Override
     public Rectangle getClipBounds() {
-        org.eclipse.swt.graphics.Rectangle clip = this.gc.getClipping();
-        return new Rectangle(clip.x, clip.y, clip.width, clip.height);
+        if (getClip() == null) {
+            return null;
+        }
+        return getClip().getBounds();
     }
 
     /**
@@ -932,10 +936,7 @@ public class SWTGraphics2D extends Graphics2D {
      */
     @Override
     public Font getFont() {
-        // retrieve the swt font description in an os indept way
-        FontData[] fontData = this.gc.getFont().getFontData();
-        // create a new AWT font with the appropiate data
-        return SWTUtils.toAwtFont(this.gc.getDevice(), fontData[0], true);
+        return this.awtFont;
     }
 
     /**
@@ -946,6 +947,10 @@ public class SWTGraphics2D extends Graphics2D {
      */
     @Override
     public void setFont(Font font) {
+        if (font == null) {
+            return;
+        }
+        this.awtFont = font;
         org.eclipse.swt.graphics.Font swtFont = getSwtFontFromPool(font);
         this.gc.setFont(swtFont);
     }
