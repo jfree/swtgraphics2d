@@ -126,6 +126,8 @@ public class SWTGraphics2D extends Graphics2D {
 
     private Font awtFont;
 
+    private Color awtColor;
+
     /** The current transform (protect this, only hand out copies). */
     private AffineTransform transform;
 
@@ -285,11 +287,27 @@ public class SWTGraphics2D extends Graphics2D {
             return;  // to be consistent with other Graphics2D implementations
         }
         if (paint instanceof Color) {
-            setColor((Color) paint);
+            this.awtColor = (Color) paint;
+            org.eclipse.swt.graphics.Color swtColor = getSwtColorFromPool(this.awtColor);
+            this.gc.setForeground(swtColor);
+            // handle transparency and compositing.
+            if (this.composite instanceof AlphaComposite) {
+                AlphaComposite acomp = (AlphaComposite) this.composite;
+                switch (acomp.getRule()) {
+                    case AlphaComposite.SRC_OVER:
+                        this.gc.setAlpha((int) (this.awtColor.getAlpha() * acomp.getAlpha()));
+                        break;
+                    default:
+                        this.gc.setAlpha(this.awtColor.getAlpha());
+                        break;
+                }
+            }
         }
         else if (paint instanceof GradientPaint) {
             GradientPaint gp = (GradientPaint) paint;
+            Color saved = this.awtColor; // color should not change with setPaint() that is not a Color
             setColor(gp.getColor1());
+            this.awtColor = saved;
         }
         else {
             //throw new RuntimeException("Can only handle 'Color' at present.");
@@ -305,38 +323,24 @@ public class SWTGraphics2D extends Graphics2D {
      */
     @Override
     public Color getColor() {
-        // TODO: it might be a good idea to keep a reference to the color
-        // specified in setPaint() or setColor(), rather than creating a
-        // new object every time getPaint() is called.
-        return SWTUtils.toAwtColor(this.gc.getForeground());
+        return this.awtColor;
     }
 
     /**
-     * Sets the current color for this graphics context.
+     * Sets the foreground color.  This method exists for backwards
+     * compatibility in AWT, you should use the
+     * {@link #setPaint(java.awt.Paint)} method.
      *
      * @param color  the color ({@code null} permitted but ignored).
      *
-     * @see #getColor()
+     * @see #setPaint(java.awt.Paint)
      */
     @Override
     public void setColor(Color color) {
         if (color == null) {
             return;
         }
-        org.eclipse.swt.graphics.Color swtColor = getSwtColorFromPool(color);
-        this.gc.setForeground(swtColor);
-        // handle transparency and compositing.
-        if (this.composite instanceof AlphaComposite) {
-            AlphaComposite acomp = (AlphaComposite) this.composite;
-            switch (acomp.getRule()) {
-            case AlphaComposite.SRC_OVER:
-                this.gc.setAlpha((int) (color.getAlpha() * acomp.getAlpha()));
-                break;
-            default:
-                this.gc.setAlpha(color.getAlpha());
-                break;
-            }
-        }
+        setPaint(color);
     }
 
     private Color backgroundColor;
