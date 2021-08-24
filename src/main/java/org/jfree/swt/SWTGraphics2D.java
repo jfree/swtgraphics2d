@@ -82,10 +82,7 @@ import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.font.FontRenderContext;
 import java.awt.font.GlyphVector;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.Area;
-import java.awt.geom.PathIterator;
-import java.awt.geom.Rectangle2D;
+import java.awt.geom.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.BufferedImageOp;
 import java.awt.image.ColorModel;
@@ -164,13 +161,22 @@ public class SWTGraphics2D extends Graphics2D {
     }
 
     /**
-     * Not implemented yet - see {@link Graphics#create()}.
+     * Creates a new graphics object that is a copy of this graphics object.
      *
-     * @return {@code null}.
+     * @return A new graphics object.
      */
     public Graphics create() {
-        // TODO Auto-generated method stub
-        return null;
+        SWTGraphics2D copy = new SWTGraphics2D(this.gc);
+        copy.setRenderingHints(getRenderingHints());
+        copy.setTransform(getTransform());
+        copy.setClip(getClip());
+        copy.setPaint(getPaint());
+        copy.setColor(getColor());
+        copy.setComposite(getComposite());
+        copy.setStroke(getStroke());
+        copy.setFont(getFont());
+        copy.setBackground(getBackground());
+        return copy;
     }
 
     /**
@@ -823,6 +829,19 @@ public class SWTGraphics2D extends Graphics2D {
         // necessary to switch temporarily the foreground and background
         // colors
         switchColors();
+        if (shape instanceof Path2D) {
+            Path2D p2d = (Path2D) shape;
+            switch (p2d.getWindingRule()) {
+                case Path2D.WIND_EVEN_ODD:
+                    this.gc.setFillRule(SWT.FILL_EVEN_ODD);
+                    break;
+                case Path2D.WIND_NON_ZERO:
+                    this.gc.setFillRule(SWT.FILL_WINDING);
+                    break;
+                default:
+                    // not recognised
+            }
+        }
         this.gc.fillPath(path);
         switchColors();
         path.dispose();
