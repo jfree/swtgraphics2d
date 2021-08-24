@@ -1272,6 +1272,9 @@ public class SWTGraphics2D extends Graphics2D {
         if (image == null) {
             return true;
         }
+        if (width <= 0 || height <= 0) {
+            return true;
+        }
         ImageData data = SWTUtils.convertAWTImageToSWT(image);
         if (data == null) {
             return false;
