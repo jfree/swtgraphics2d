@@ -2,7 +2,7 @@
  * SWTGraphics2D : a bridge from Java2D to SWT
  * ===========================================
  *
- * (C) Copyright 2006-2016, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2006-2021, by Object Refinery Limited and Contributors.
  *
  * Project Info:  https://github.com/jfree/swtgraphics2d
  *
@@ -27,7 +27,7 @@
  * ------------------
  * SWTGraphics2D.java
  * ------------------
- * (C) Copyright 2006-2016, by Henry Proudhon and Contributors.
+ * (C) Copyright 2006-2021, by Henry Proudhon and Contributors.
  *
  * Original Author:  Henry Proudhon (henry.proudhon AT ensmp.fr);
  * Contributor(s):   Cedric Chabanois (cchabanois AT no-log.org);
@@ -126,6 +126,9 @@ public class SWTGraphics2D extends Graphics2D {
 
     private Font awtFont;
 
+    /** The current transform (protect this, only hand out copies). */
+    private AffineTransform transform;
+
     /** 
      * A reference to the compositing rule to apply. This is necessary
      * due to the poor compositing interface of the SWT toolkit. 
@@ -153,6 +156,7 @@ public class SWTGraphics2D extends Graphics2D {
         super();
         this.gc = gc;
         this.hints = new RenderingHints(null);
+        this.transform = new AffineTransform();
         this.composite = AlphaComposite.getInstance(AlphaComposite.SRC, 1.0f);
         setStroke(new BasicStroke());
     }
@@ -541,74 +545,79 @@ public class SWTGraphics2D extends Graphics2D {
     }
 
     /**
-     * Returns the current transform.
+     * Returns a copy of the current transform.
      *
-     * @return The current transform.
+     * @return A copy of the current transform (never {@code null}).
+     *
+     * @see #setTransform(java.awt.geom.AffineTransform)
      */
     @Override
     public AffineTransform getTransform() {
-        Transform swtTransform = new Transform(this.gc.getDevice());
-        this.gc.getTransform(swtTransform);
-        AffineTransform awtTransform = toAwtTransform(swtTransform);
-        swtTransform.dispose();
-        return awtTransform;
+        return (AffineTransform) this.transform.clone();
     }
 
     /**
-     * Sets the current transform.
+     * Sets the transform.
      *
-     * @param t  the transform.
+     * @param t  the new transform ({@code null} permitted, resets to the
+     *     identity transform).
+     *
+     * @see #getTransform()
      */
     @Override
     public void setTransform(AffineTransform t) {
-        Transform transform = getSwtTransformFromPool(t);
-        this.gc.setTransform(transform);
+        if (t == null) {
+            this.transform = new AffineTransform();
+        } else {
+            this.transform = new AffineTransform(t);
+        }
+        Transform swtTransform = getSwtTransformFromPool(this.transform);
+        this.gc.setTransform(swtTransform);
     }
 
     /**
-     * Concatenates the specified transform to the existing transform.
+     * Applies this transform to the existing transform by concatenating it.
      *
-     * @param t  the transform.
+     * @param t  the transform ({@code null} not permitted).
      */
     @Override
     public void transform(AffineTransform t) {
-        Transform swtTransform = new Transform(this.gc.getDevice());
-        this.gc.getTransform(swtTransform);
-        swtTransform.multiply(getSwtTransformFromPool(t));
-        this.gc.setTransform(swtTransform);
-        swtTransform.dispose();
+        AffineTransform tx = getTransform();
+        tx.concatenate(t);
+        setTransform(tx);
     }
 
     /**
-     * Applies a translation.
+     * Applies the translation {@code (tx, ty)}.  This call is delegated
+     * to {@link #translate(double, double)}.
      *
-     * @param x  the translation along the x-axis.
-     * @param y  the translation along the y-axis.
+     * @param tx  the x-translation.
+     * @param ty  the y-translation.
+     *
+     * @see #translate(double, double)
      */
     @Override
-    public void translate(int x, int y) {
-        Transform swtTransform = new Transform(this.gc.getDevice());
-        this.gc.getTransform(swtTransform);
-        swtTransform.translate(x, y);
-        this.gc.setTransform(swtTransform);
-        swtTransform.dispose();
+    public void translate(int tx, int ty) {
+        translate((double) tx, (double) ty);
     }
 
     /**
-     * Applies a translation.
+     * Applies the translation {@code (tx, ty)}.
      *
-     * @param tx  the translation along the x-axis.
-     * @param ty  the translation along the y-axis.
+     * @param tx  the x-translation.
+     * @param ty  the y-translation.
      */
     @Override
     public void translate(double tx, double ty) {
-        translate((int) tx, (int) ty);
+        AffineTransform t = getTransform();
+        t.translate(tx, ty);
+        setTransform(t);
     }
 
     /**
-     * Applies a rotation transform.
+     * Applies a rotation (anti-clockwise) about {@code (0, 0)}.
      *
-     * @param theta  the angle of rotation.
+     * @param theta  the rotation angle (in radians).
      */
     @Override
     public void rotate(double theta) {
@@ -618,9 +627,11 @@ public class SWTGraphics2D extends Graphics2D {
     }
 
     /**
-     * Not implemented - see {@link Graphics2D#rotate(double, double, double)}.
+     * Applies a rotation (anti-clockwise) about {@code (x, y)}.
      *
-     * @see java.awt.Graphics2D#rotate(double, double, double)
+     * @param theta  the rotation angle (in radians).
+     * @param x  the x-coordinate.
+     * @param y  the y-coordinate.
      */
     @Override
     public void rotate(double theta, double x, double y) {
@@ -632,27 +643,30 @@ public class SWTGraphics2D extends Graphics2D {
     /**
      * Applies a scale transform.
      *
-     * @param scaleX  the scale factor along the x-axis.
-     * @param scaleY  the scale factor along the y-axis.
+     * @param sx  the scale factor along the x-axis.
+     * @param sy  the scale factor along the y-axis.
      */
     @Override
-    public void scale(double scaleX, double scaleY) {
-        Transform swtTransform = new Transform(this.gc.getDevice());
-        this.gc.getTransform(swtTransform);
-        swtTransform.scale((float) scaleX, (float) scaleY);
-        this.gc.setTransform(swtTransform);
-        swtTransform.dispose();
+    public void scale(double sx, double sy) {
+        AffineTransform t = getTransform();
+        t.scale(sx, sy);
+        setTransform(t);
     }
 
     /**
-     * Applies a shear transform.
+     * Applies a shear transformation. This is equivalent to the following
+     * call to the {@code transform} method:
+     * <br><br>
+     * <ul><li>
+     * {@code transform(AffineTransform.getShearInstance(shx, shy));}
+     * </ul>
      *
-     * @param shearX  the x-factor.
-     * @param shearY  the y-factor.
+     * @param shx  the x-shear factor.
+     * @param shy  the y-shear factor.
      */
     @Override
-    public void shear(double shearX, double shearY) {
-        transform(AffineTransform.getShearInstance(shearX, shearY));
+    public void shear(double shx, double shy) {
+        transform(AffineTransform.getShearInstance(shx, shy));
     }
 
     /**
