@@ -63,23 +63,13 @@
 
 package org.jfree.swt;
 
-import java.awt.AlphaComposite;
-import java.awt.BasicStroke;
+import java.awt.*;
 import java.awt.Color;
-import java.awt.Composite;
 import java.awt.Font;
 import java.awt.FontMetrics;
-import java.awt.GradientPaint;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.GraphicsConfiguration;
 import java.awt.Image;
-import java.awt.Paint;
 import java.awt.Rectangle;
-import java.awt.RenderingHints;
 import java.awt.RenderingHints.Key;
-import java.awt.Shape;
-import java.awt.Stroke;
 import java.awt.font.FontRenderContext;
 import java.awt.font.GlyphVector;
 import java.awt.geom.*;
@@ -99,10 +89,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.Path;
+import org.eclipse.swt.graphics.Pattern;
 import org.eclipse.swt.graphics.Resource;
 import org.eclipse.swt.graphics.Transform;
 
@@ -139,6 +129,9 @@ public class SWTGraphics2D extends Graphics2D {
 
     /** A HashMap to store the SWT font resources. */
     private Map fontsPool = new HashMap();
+
+    /** A pool for storing SWT pattern resources. */
+    private Map<GradientPaint, Pattern> patternsPool = new HashMap<>();
 
     /** A HashMap to store the SWT transform resources. */
     private Map transformsPool = new HashMap();
@@ -311,12 +304,15 @@ public class SWTGraphics2D extends Graphics2D {
         }
         else if (paint instanceof GradientPaint) {
             GradientPaint gp = (GradientPaint) paint;
-            Color saved = this.awtColor; // color should not change with setPaint() that is not a Color
-            setColor(gp.getColor1());
-            this.awtColor = saved;
+            Pattern pattern = fetchOrCreateSWTPattern(gp);
+            this.gc.setForegroundPattern(pattern);
+            this.gc.setBackgroundPattern(pattern);
+        } else if (paint instanceof MultipleGradientPaint) {
+            MultipleGradientPaint mgp = (MultipleGradientPaint) paint;
+            // how to handle?
         }
         else {
-            //throw new RuntimeException("Can only handle 'Color' at present.");
+            throw new RuntimeException("Can only handle 'Color' and 'GradientPaint' at present.");
         }
     }
 
@@ -828,7 +824,9 @@ public class SWTGraphics2D extends Graphics2D {
         // Note that for consistency with the AWT implementation, it is
         // necessary to switch temporarily the foreground and background
         // colors
-        switchColors();
+        if (this.gc.getForegroundPattern() == null) {
+            switchColors();
+        }
         if (shape instanceof Path2D) {
             Path2D p2d = (Path2D) shape;
             switch (p2d.getWindingRule()) {
@@ -843,7 +841,9 @@ public class SWTGraphics2D extends Graphics2D {
             }
         }
         this.gc.fillPath(path);
-        switchColors();
+        if (this.gc.getForegroundPattern() == null) {
+            switchColors();
+        }
         path.dispose();
     }
 
@@ -1460,6 +1460,7 @@ public class SWTGraphics2D extends Graphics2D {
         }
         this.fontsPool.clear();
         this.colorsPool.clear();
+        this.patternsPool.clear();
         this.transformsPool.clear();
         this.resourcePool.clear();
     }
@@ -1499,18 +1500,32 @@ public class SWTGraphics2D extends Graphics2D {
     private org.eclipse.swt.graphics.Color getSwtColorFromPool(Color awtColor) {
         org.eclipse.swt.graphics.Color swtColor =
                 (org.eclipse.swt.graphics.Color)
-                // we can't use the following valueOf() method, because it
-                // won't compile with JDK1.4
-                // this.colorsPool.get(Integer.valueOf(awtColor.getRGB()));
-                this.colorsPool.get(new Integer(awtColor.getRGB()));
+                this.colorsPool.get(Integer.valueOf(awtColor.getRGB()));
         if (swtColor == null) {
             swtColor = SWTUtils.toSwtColor(this.gc.getDevice(), awtColor);
             addToResourcePool(swtColor);
-            // see comment above
-            //this.colorsPool.put(Integer.valueOf(awtColor.getRGB()), swtColor);
-            this.colorsPool.put(new Integer(awtColor.getRGB()), swtColor);
+            this.colorsPool.put(Integer.valueOf(awtColor.getRGB()), swtColor);
         }
         return swtColor;
+    }
+
+    /**
+     * Fetches an SWT Pattern matching the supplied gradient paint, or creates one, and returns it.
+     *
+     * @param gp  the gradient paint.
+     *
+     * @return The SWT Pattern.
+     */
+    private Pattern fetchOrCreateSWTPattern(GradientPaint gp) {
+        Pattern swtPattern = this.patternsPool.get(gp);
+        if (swtPattern == null) {
+            swtPattern = new Pattern(this.gc.getDevice(), (float) gp.getPoint1().getX(), (float) gp.getPoint1().getY(),
+                    (float) gp.getPoint2().getX(), (float) gp.getPoint2().getY(), getSwtColorFromPool(gp.getColor1()),
+                    getSwtColorFromPool(gp.getColor2()));
+            addToResourcePool(swtPattern);
+            this.patternsPool.put(gp, swtPattern);
+        }
+        return swtPattern;
     }
 
     /**
