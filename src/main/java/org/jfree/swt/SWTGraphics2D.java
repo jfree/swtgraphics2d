@@ -124,6 +124,12 @@ public class SWTGraphics2D extends Graphics2D {
      */
     private java.awt.Composite composite;
 
+    /**
+     * The device configuration (this is lazily instantiated in the
+     * getDeviceConfiguration() method).
+     */
+    private GraphicsConfiguration deviceConfiguration;
+
     /** A HashMap to store the SWT color resources. */
     private Map colorsPool = new HashMap();
 
@@ -173,13 +179,20 @@ public class SWTGraphics2D extends Graphics2D {
     }
 
     /**
-     * Not implemented yet - see {@link Graphics2D#getDeviceConfiguration()}.
+     * Returns the device configuration associated with this
+     * {@code Graphics2D}.
      *
-     * @return {@code null}.
+     * @return The device configuration (never {@code null}).
      */
+    @Override
     public GraphicsConfiguration getDeviceConfiguration() {
-        // TODO Auto-generated method stub
-        return null;
+        if (this.deviceConfiguration == null) {
+            int width = this.gc.getDevice().getBounds().width;
+            int height = this.gc.getDevice().getBounds().height;
+            this.deviceConfiguration = new SWTGraphicsConfiguration(width,
+                    height);
+        }
+        return this.deviceConfiguration;
     }
 
     /**
