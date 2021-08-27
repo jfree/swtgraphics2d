@@ -9,11 +9,11 @@ Version 1.0 - 20 February 2016.
 
 Overview
 --------
-A Graphics2D implementation that targets an SWT graphics context, allowing the use of Java2D code in SWT.  This class was originally developed as part of the JFreeChart project (http://www.jfree.org/jfreechart).  It is now a standalone project.
+**SWTGraphics2D** is an implementation of Java2D's `Graphics2D` API that targets an Eclipse Standard Widget Toolkit (SWT) graphics context, allowing the use of Java2D code in SWT applications.  This class was originally developed as part of the JFreeChart project (http://www.jfree.org/jfreechart).  It is now a standalone project.
 
 Include
 -------
-SWTGraphics2D is published to the Central Repository.  You can include it in your projects with the following dependency:
+**SWTGraphics2D** is published to the Central Repository.  You can include it in your projects with the following dependency:
 
     <dependency>
       <groupId>org.jfree</groupId>
@@ -23,11 +23,11 @@ SWTGraphics2D is published to the Central Repository.  You can include it in you
 
 Testing
 -------
-**SWTGraphics2D** is being tested using [Graphics2D Tester](https://github.com/jfree/graphics2d-tester) and produces the output shown below (using the not-yet-released version of `SWTGraphics2D`)
+**SWTGraphics2D** is being tested using [Graphics2D Tester](https://github.com/jfree/graphics2d-tester) and produces the output shown below (using the snapshot version of `SWTGraphics2D`)
 
 Due to limitations of the SWT Graphics API, there are several Java2D features that cannot be supported:
 
-- the Porter-Duff compositing rules in `AlphaComposite
+- the Porter-Duff compositing rules in `AlphaComposite`
 - multi-linear and radial gradient paints.
   
 Areas that still need work:
@@ -47,14 +47,15 @@ Change History
 --------------
 
 Version 1.1.0 (not yet released)
+- fixed interaction between `setPaint()` and `setColor()`
 - added support for `GradientPaint` (without cyclic attribute) in `setPaint()`
 - apply winding rule in `fill(Shape)`
 - improved correctness and efficiency of transformations
-- fixed `setFont()` method for `null` argument
-- fixed interaction between `setPaint()` and `setColor()`
-- fixed failing tests for `drawImage()` methods with `null` arguments
 - implemented `create()` method
 - implemented `getDeviceConfiguration()`.
+- fixed `setFont()` method for `null` argument
+- fixed failing tests for `drawImage()` methods with `null` arguments
+- added JUnit 5 tests
 
 Version 1.0 (20 February 2016)
 - initial release as a standalone project (previously included with JFreeChart SWT support).
