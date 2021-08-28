@@ -32,7 +32,7 @@
  * Original Author:  Henry Proudhon (henry.proudhon AT ensmp.fr);
  * Contributor(s):   Cedric Chabanois (cchabanois AT no-log.org);
  *                   David Gilbert (for Object Refinery Limited);
- *                   Ronnie Duan (see bug report 2583891);
+ *                   Ronnie Duan (https://sourceforge.net/p/jfreechart/bugs/914/);
  *                   Kevin Xu (parts of patch 3506228);
  *
  * Changes
@@ -113,7 +113,11 @@ public class SWTGraphics2D extends Graphics2D {
 
     private Font awtFont;
 
+    /** The AWT color that has been set. */
     private Color awtColor;
+
+    /** The AWT paint that has been set. */
+    private Paint awtPaint;
 
     /** The current transform (protect this, only hand out copies). */
     private AffineTransform transform;
@@ -275,10 +279,7 @@ public class SWTGraphics2D extends Graphics2D {
      */
     @Override
     public Paint getPaint() {
-        // TODO: it might be a good idea to keep a reference to the color
-        // specified in setPaint() or setColor(), rather than creating a
-        // new object every time getPaint() is called.
-        return SWTUtils.toAwtColor(this.gc.getForeground());
+        return this.awtPaint;
     }
 
     /**
@@ -298,6 +299,7 @@ public class SWTGraphics2D extends Graphics2D {
         if (paint == null) {
             return;  // to be consistent with other Graphics2D implementations
         }
+        this.awtPaint = paint;
         if (paint instanceof Color) {
             this.awtColor = (Color) paint;
             org.eclipse.swt.graphics.Color swtColor = getSwtColorFromPool(this.awtColor);

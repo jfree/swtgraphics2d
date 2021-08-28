@@ -49,6 +49,7 @@ Change History
 Version 1.1.0 (not yet released)
 - fixed interaction between `setPaint()` and `setColor()`
 - added support for `GradientPaint` (without cyclic attribute) in `setPaint()`
+- cache AWT paint setting to return in `getPaint()`  
 - apply winding rule in `fill(Shape)`
 - improved correctness and efficiency of transformations
 - implemented `create()` method
