@@ -520,11 +520,8 @@ public class SWTGraphics2D extends Graphics2D {
      */
     @Override
     public void clipRect(int x, int y, int width, int height) {
-        org.eclipse.swt.graphics.Rectangle clip = this.gc.getClipping();
-        org.eclipse.swt.graphics.Rectangle r 
-                = new org.eclipse.swt.graphics.Rectangle(x, y, width, height);
-        clip.intersect(r);
-        this.gc.setClipping(clip);
+        setRect(x, y, width, height);
+        clip(this.rect);
     }
 
     /**
@@ -1725,4 +1722,24 @@ public class SWTGraphics2D extends Graphics2D {
                 + " not recognised");
         }
     }
+
+    /** A reusable rectangle to avoid garbage. */
+    private Rectangle2D rect;
+
+    /**
+     * Sets the attributes of the reusable {@link Rectangle2D} object.
+     *
+     * @param x  the x-coordinate.
+     * @param y  the y-coordinate.
+     * @param width  the width.
+     * @param height  the height.
+     */
+    private void setRect(int x, int y, int width, int height) {
+        if (this.rect == null) {
+            this.rect = new Rectangle2D.Double(x, y, width, height);
+        } else {
+            this.rect.setRect(x, y, width, height);
+        }
+    }
+
 }
