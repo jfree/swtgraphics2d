@@ -111,6 +111,12 @@ public class SWTGraphics2D extends Graphics2D {
      */
     private RenderingHints hints;
 
+    /** The user clip. */
+    private Shape clip;
+
+    /** Save the initial clip for when the user clip is reset to null. */
+    private org.eclipse.swt.graphics.Rectangle swtInitialClip;
+
     private Font awtFont;
 
     /** The AWT color that has been set. */
@@ -160,6 +166,8 @@ public class SWTGraphics2D extends Graphics2D {
         this.hints = new RenderingHints(null);
         this.transform = new AffineTransform();
         this.composite = AlphaComposite.getInstance(AlphaComposite.SRC, 1.0f);
+        this.clip = null;
+        this.swtInitialClip = gc.getClipping();
         setStroke(new BasicStroke());
     }
 
@@ -491,15 +499,29 @@ public class SWTGraphics2D extends Graphics2D {
      */
     @Override
     public void clip(Shape s) {
-        Path path = toSwtPath(s);
-        this.gc.setClipping(path);
-        path.dispose();
+        if (s instanceof Line2D) {
+            s = s.getBounds2D();
+        }
+        if (this.clip == null) {
+            setClip(s);
+            return;
+        }
+        Shape ts = this.transform.createTransformedShape(s);
+        if (!ts.intersects(this.clip.getBounds2D())) {
+            setClip(new Rectangle2D.Double());
+            return;
+        } else {
+            Area a1 = new Area(s);
+            Area a2 = new Area(getClip());
+            a1.intersect(a2);
+            setClip(new Path2D.Double(a1));
+        }
     }
 
     /**
      * Returns the clip bounds.
      *
-     * @return The clip bounds.
+     * @return The clip bounds (possibly {@code null)}.
      */
     @Override
     public Rectangle getClipBounds() {
@@ -525,28 +547,44 @@ public class SWTGraphics2D extends Graphics2D {
     }
 
     /**
-     * Returns the current clip.
+     * Returns the user clipping region.  The initial default value is
+     * {@code null}.
      *
-     * @return The current clip.
+     * @return The user clipping region (possibly {@code null}).
+     *
+     * @see #setClip(java.awt.Shape)
      */
     @Override
     public Shape getClip() {
-        return SWTUtils.toAwtRectangle(this.gc.getClipping());
+        if (this.clip == null) {
+            return null;
+        }
+        try {
+            AffineTransform inv = this.transform.createInverse();
+            return inv.createTransformedShape(this.clip);
+        } catch (NoninvertibleTransformException ex) {
+            return null;
+        }
     }
 
     /**
      * Sets the clip region.
      *
-     * @param clip  the clip.
+     * @param region  the clip.
      */
     @Override
-    public void setClip(Shape clip) {
-        if (clip == null) {
-            return;
+    public void setClip(Shape region) {
+        this.clip = this.transform.createTransformedShape(region);
+        if (this.clip != null) {
+            Path clipPath = toSwtPath(region);
+            this.gc.setClipping(clipPath);
+            clipPath.dispose();
+        } else {
+            AffineTransform saved = getTransform();
+            setTransform(null);
+            this.gc.setClipping(swtInitialClip);
+            setTransform(saved);
         }
-        Path clipPath = toSwtPath(clip);
-        this.gc.setClipping(clipPath);
-        clipPath.dispose();
     }
 
     /**

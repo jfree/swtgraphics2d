@@ -940,3 +940,4 @@ public class SWTGraphics2DTest {
     }
 
 }
+
