@@ -16,6 +16,18 @@
     <description>An implementation of Java2D's Graphics2D API that targets an SWT graphics context, allowing existing Java2D code to be reused in SWT applications.</description>
     <url>https://github.com/jfree/swtgraphics2d</url>
 
+    <developers>
+        <developer>
+            <name>Henry Proudhon</name>
+            <email>henry.proudhon AT mines-paristech.fr</email>
+        </developer>
+        <developer>
+            <name>David Gilbert</name>
+            <email>dave@jfree.org</email>
+            <url>https://github.com/jfree</url>
+        </developer>
+    </developers>
+
     <scm>
         <url>https://github.com/jfree/swtgraphics2d</url>
         <connection>scm:git:git://github.com/jfree/swtgraphics2d.git</connection>
