@@ -29,35 +29,11 @@
  * ------------------
  * (C) Copyright 2006-2021, by Henry Proudhon and Contributors.
  *
- * Original Author:  Henry Proudhon (henry.proudhon AT ensmp.fr);
- * Contributor(s):   Cedric Chabanois (cchabanois AT no-log.org);
- *                   David Gilbert (for Object Refinery Limited);
+ * Original Author:  Henry Proudhon (henry.proudhon AT mines-paristech.fr);
+ * Contributor(s):   David Gilbert (for Object Refinery Limited);
+ *                   Cedric Chabanois (cchabanois AT no-log.org, resource pools);
  *                   Ronnie Duan (https://sourceforge.net/p/jfreechart/bugs/914/);
- *                   Kevin Xu (parts of patch 3506228);
- *
- * Changes
- * -------
- * 14-Jun-2006 : New class (HP);
- * 29-Jan-2007 : Fixed the fillRect method (HP);
- * 31-Jan-2007 : Moved the dummy JPanel to SWTUtils.java,
- *               implemented the drawLine method (HP);
- * 07-Apr-2007 : Dispose some of the SWT resources,
- *               thanks to silent for pointing this out (HP);
- * 23-May-2007 : Removed resource leaks by adding a resource pool (CC);
- * 15-Jun-2007 : Fixed compile error for JDK 1.4 (DG);
- * 22-Oct-2007 : Implemented clipping (HP);
- * 22-Oct-2007 : Implemented some AlphaComposite support (HP);
- * 23-Oct-2007 : Added mechanism for storing RenderingHints (which are
- *               still ignored at this point) (DG);
- * 23-Oct-2007 : Implemented drawPolygon(), drawPolyline(), drawOval(),
- *               fillOval(), drawArc() and fillArc() (DG);
- * 27-Nov-2007 : Implemented a couple of drawImage() methods (DG);
- * 18-Nov-2008 : Check for GradientPaint in setPaint() method (DG);
- * 27-Feb-2009 : Implemented fillPolygon() - see bug 2583891 (DG);
- * 04-Jul-2012 : Fixed get/setStroke() - see bug 3514487 (DG);
- * 18-Sep-2012 : Fixed missing text - see bug 3482106 and patch 3506228 (DG);
- * 03-Jul-2013 : Use ParamChecks (DG);
- * 19-Feb-2016 : Move to project separate from JFreeChart (DG);
+ *                   Kevin Xu (parts of patch https://sourceforge.net/p/jfreechart/patches/297/);
  *
  */
 
@@ -1521,7 +1497,7 @@ public class SWTGraphics2D extends Graphics2D {
      * a SWT font resource. If a corresponding SWT font
      * instance is already in the pool, it will be used
      * instead of creating a new one. This is used in
-     * {@link #setFont()} for instance.
+     * {@link #setFont(Font)} for instance.
      *
      * @param font The AWT font to convert.
      * @return The SWT font instance.
@@ -1543,7 +1519,7 @@ public class SWTGraphics2D extends Graphics2D {
      * a SWT color resource. If a corresponding SWT color
      * instance is already in the pool, it will be used
      * instead of creating a new one. This is used in
-     * {@link #setColor()} for instance.
+     * {@link #setColor(Color)} for instance.
      *
      * @param awtColor The AWT color to convert.
      * @return A SWT color instance.
@@ -1584,7 +1560,7 @@ public class SWTGraphics2D extends Graphics2D {
      * a SWT transform resource. If a corresponding SWT transform
      * instance is already in the pool, it will be used
      * instead of creating a new one. This is used in
-     * {@link #setTransform()} for instance.
+     * {@link #setTransform(AffineTransform)} for instance.
      *
      * @param awtTransform The AWT transform to convert.
      * @return A SWT transform instance.
