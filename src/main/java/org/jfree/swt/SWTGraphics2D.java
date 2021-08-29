@@ -559,7 +559,8 @@ public class SWTGraphics2D extends Graphics2D {
      */
     @Override
     public void setClip(int x, int y, int width, int height) {
-        this.gc.setClipping(x, y, width, height);
+        setRect(x, y, width, height);
+        setClip(this.rect);
     }
 
     /**
