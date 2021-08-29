@@ -1,7 +1,7 @@
 SWTGraphics2D
 =============
 
-Version 1.0 - 20 February 2016.
+Version 1.1.0 - not yet released.
 
 (C)opyright 2006-2021, by Object Refinery Limited and Contributors.  All rights reserved.
 
@@ -9,7 +9,11 @@ Version 1.0 - 20 February 2016.
 
 Overview
 --------
-**SWTGraphics2D** is an implementation of Java2D's `Graphics2D` API that targets an Eclipse Standard Widget Toolkit (SWT) graphics context, allowing the use of Java2D code in SWT applications.  This class was originally developed as part of the JFreeChart project (http://www.jfree.org/jfreechart).  It is now a standalone project.
+**SWTGraphics2D** is an implementation of Java2D's `Graphics2D` API that targets an Eclipse Standard Widget Toolkit (SWT) graphics context, allowing the use of Java2D code in SWT applications.  
+
+Background
+----------
+The code was originally developed as part of the [JFreeChart](http://github.com/jfree/jfreechart) project .  It is now a standalone project.
 
 Include
 -------
@@ -29,19 +33,20 @@ Due to limitations of the SWT Graphics API, there are several Java2D features th
 
 - the Porter-Duff compositing rules in `AlphaComposite`
 - multi-linear and radial gradient paints.
-  
-Areas that still need work:
-
-- clipping functions are not yet fully correct
-- font metrics are approximated
 
 ![SWT test output](swtgraphics2d.png)
 
 License
 -------
-SWTGraphics2D is free software under the terms of the GNU Lesser General Public License (LGPL) version 2.1 or later.  
+**SWTGraphics2D** is free software under the terms of the GNU Lesser General Public License (LGPL) version 2.1 or later.  
 
-Please note that SWTGraphics2D is distributed WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  Please refer to the license for details.
+    Please note that SWTGraphics2D is distributed WITHOUT ANY WARRANTY; without even
+    the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
+    Please refer to the license for details.
+
+In the future, it is planned that the code will be dual-licensed under the Eclipse Public License 2.0 in addition to 
+the LGPL.  The main contributors (Henry Proudhon and David Gilbert) have agreed to this already.  
+
 
 Change History
 --------------
@@ -52,8 +57,9 @@ Version 1.1.0 (not yet released)
 - cache AWT paint setting to return in `getPaint()`  
 - apply winding rule in `fill(Shape)`
 - improved correctness and efficiency of transformations
+- fixed clipping bugs
 - implemented `create()` method
-- implemented `getDeviceConfiguration()`.
+- implemented `getDeviceConfiguration()`
 - fixed `setFont()` method for `null` argument
 - fixed failing tests for `drawImage()` methods with `null` arguments
 - added JUnit 5 tests
