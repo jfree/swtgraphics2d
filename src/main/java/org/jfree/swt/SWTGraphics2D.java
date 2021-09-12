@@ -746,13 +746,14 @@ public class SWTGraphics2D extends Graphics2D {
      * @see #draw(Shape)
      */
     @Override
-    public void drawPolygon(int [] xPoints, int [] yPoints, int npoints) {
-        drawPolyline(xPoints, yPoints, npoints);
-        if (npoints > 1) {
-            this.gc.drawLine(xPoints[npoints - 1], yPoints[npoints - 1],
-                    xPoints[0], yPoints[0]);
-        }
-    }
+    public void drawPolygon(int[] xPoints, int[] yPoints, int npoints) {
+		final int[] polygons = new int[npoints * 2];
+		for (int i = 0; i < npoints; i++) {
+			polygons[i * 2] = xPoints[i];
+			polygons[(2 * i) + 1] = yPoints[i];
+		}
+		gc.drawPolygon(polygons);
+	}
 
     /**
      * Draws a sequence of connected lines specified by the given points, using
@@ -760,25 +761,22 @@ public class SWTGraphics2D extends Graphics2D {
      *
      * @param xPoints  the x-coordinates.
      * @param yPoints  the y-coordinates.
-     * @param npoints  the number of points in the polygon.
+     * @param npoints  the number of points in the polyline.
      *
      * @see #draw(Shape)
      */
     @Override
     public void drawPolyline(int[] xPoints, int[] yPoints, int npoints) {
-        if (npoints > 1) {
-            int x0 = xPoints[0];
-            int y0 = yPoints[0];
-            int x1 = 0, y1 = 0;
-            for (int i = 1; i < npoints; i++) {
-                x1 = xPoints[i];
-                y1 = yPoints[i];
-                this.gc.drawLine(x0, y0, x1, y1);
-                x0 = x1;
-                y0 = y1;
-            }
-        }
-    }
+		if (npoints > 1) {
+			final int[] polylines = new int[npoints * 2];
+			for (int i = 0; i < npoints; i++) {
+				polylines[i * 2] = xPoints[i];
+				polylines[(2 * i) + 1] = yPoints[i];
+			}
+			gc.drawPolyline(polylines);
+
+		}
+	}
 
     /**
      * Draws an oval that fits within the specified rectangular region.
