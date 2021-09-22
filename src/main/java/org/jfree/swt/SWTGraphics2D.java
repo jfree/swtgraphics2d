@@ -2,7 +2,7 @@
  * SWTGraphics2D : a bridge from Java2D to SWT
  * ===========================================
  *
- * (C) Copyright 2006-2021, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2006-2021, by David Gilbert and Contributors.
  *
  * Project Info:  https://github.com/jfree/swtgraphics2d
  *
@@ -30,7 +30,7 @@
  * (C) Copyright 2006-2021, by Henry Proudhon and Contributors.
  *
  * Original Author:  Henry Proudhon (henry.proudhon AT mines-paristech.fr);
- * Contributor(s):   David Gilbert (for Object Refinery Limited);
+ * Contributor(s):   David Gilbert;
  *                   Cedric Chabanois (cchabanois AT no-log.org, resource pools);
  *                   Ronnie Duan (https://sourceforge.net/p/jfreechart/bugs/914/);
  *                   Kevin Xu (parts of patch https://sourceforge.net/p/jfreechart/patches/297/);
