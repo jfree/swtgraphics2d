@@ -1,7 +1,7 @@
 SWTGraphics2D
 =============
 
-Version 1.1.0 - not yet released.
+Version 1.1.0 - 29 August 2021.
 
 (C)opyright 2006-2021, by Object Refinery Limited and Contributors.  All rights reserved.
 
@@ -22,7 +22,7 @@ Include
     <dependency>
       <groupId>org.jfree</groupId>
       <artifactId>swtgraphics2d</artifactId>
-      <version>1.0</version>
+      <version>1.1.0</version>
     </dependency>
 
 Testing
@@ -51,7 +51,7 @@ the LGPL.  The main contributors (Henry Proudhon and David Gilbert) have agreed 
 Change History
 --------------
 
-Version 1.1.0 (not yet released)
+Version 1.1.0 (29-Aug-2021)
 - fixed interaction between `setPaint()` and `setColor()`
 - added support for `GradientPaint` (without cyclic attribute) in `setPaint()`
 - cache AWT paint setting to return in `getPaint()`  
