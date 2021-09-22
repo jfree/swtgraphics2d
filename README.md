@@ -1,9 +1,9 @@
 SWTGraphics2D
 =============
 
-Version 1.1.0 - 29 August 2021.
+Version 1.1.1 - not yet released.
 
-(C)opyright 2006-2021, by Object Refinery Limited and Contributors.  All rights reserved.
+(C)opyright 2006-2021, by David Gilbert and Contributors.  All rights reserved.
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.jfree/swtgraphics2d/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.jfree/swtgraphics2d)
 
@@ -44,12 +44,14 @@ License
     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
     Please refer to the license for details.
 
-In the future, it is planned that the code will be dual-licensed under the Eclipse Public License 2.0 in addition to 
-the LGPL.  The main contributors (Henry Proudhon and David Gilbert) have agreed to this already.  
+Additionally, the code is dual-licensed under the Eclipse Public License 2.0 (with the agreement of the main contributors: David Gilbert, Henry Proudhon and Cedric Chabanois).  
 
 
 Change History
 --------------
+
+Version 1.1.1 (not-yet-released)
+- added the Eclipse Public License 2.0 as an option alongside the existing GNU Lesser General Public License.
 
 Version 1.1.0 (29-Aug-2021)
 - fixed interaction between `setPaint()` and `setColor()`
