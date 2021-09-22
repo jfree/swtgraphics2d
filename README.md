@@ -51,6 +51,7 @@ Change History
 --------------
 
 Version 1.1.1 (not-yet-released)
+- update `drawPolygon` and `drawPolyline` to directly use SWT GC equivalent ([#2](https://github.com/jfree/swtgraphics2d/pull/2))
 - added the Eclipse Public License 2.0 as an option alongside the existing GNU Lesser General Public License.
 
 Version 1.1.0 (29-Aug-2021)
